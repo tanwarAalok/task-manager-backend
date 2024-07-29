@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connectDB from "./config/db";
 import taskRoutes from './routes/taskRoutes';
 import authRoutes from "./routes/authRoutes";
+import {authenticate} from "./middleware/authMiddleware";
 
 
 dotenv.config();
@@ -19,8 +20,7 @@ app.use(express.json());
 connectDB()
 
 
-
-app.use('/api/task', taskRoutes);
+app.use('/api/task', authenticate, taskRoutes);
 app.use('/api/auth', authRoutes);
 
 
