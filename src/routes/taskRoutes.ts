@@ -5,12 +5,13 @@ import {
     deleteTask,
     getTasks,
     getTaskById,
-    getTaskByStatus, updateTaskStatus
+    getTaskByStatus, updateTaskStatus, getBoardByUserId
 } from '../controllers/taskController';
 
 const router: Router = Router();
 
 router.get('/get/all', getTasks);
+router.get('/get/board/:userId', getBoardByUserId);
 router.post('/create', createTask);
 router.get('/status/:status', getTaskByStatus);
 router.get('/get/:id', getTaskById);

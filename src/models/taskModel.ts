@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import {TaskPriority, TaskStatus} from "../utils/enums";
 
-interface Task extends Document {
+export interface Task extends Document {
     title: string;
     description: string;
     status: TaskStatus;

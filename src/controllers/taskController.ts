@@ -143,7 +143,7 @@ export const updateTaskStatus = async (req: Request, res: Response) => {
         }
 
         const task = await TaskModel.findOneAndUpdate(
-            { id: taskId },
+            { _id: taskId },
             { status },
             { new: true }
         );
@@ -158,5 +158,41 @@ export const updateTaskStatus = async (req: Request, res: Response) => {
             res.status(500).json({message: "Error occurred", error: err.message});
         }
         res.status(500).json({error: 'Server error' });
+    }
+};
+
+export const getBoardByUserId = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+
+    try {
+        const tasks = await TaskModel.find({ createdBy: userId });
+        const board = {
+            columns: {
+                todo: {
+                    id: "todo",
+                    tasks: tasks.filter(task => task.status === "todo")
+                },
+                inprogress: {
+                    id: "inprogress",
+                    tasks: tasks.filter(task => task.status === "inprogress")
+                },
+                underreview: {
+                    id: "underreview",
+                    tasks: tasks.filter(task => task.status === "underreview")
+                },
+                finished: {
+                    id: "finished",
+                    tasks: tasks.filter(task => task.status === "finished")
+                }
+            }
+        };
+
+        res.status(200).json({ message: "User board", data: board });
+    } catch (err) {
+        if (err instanceof Error) {
+            res.status(500).json({ message: "Error occurred", error: err.message });
+        } else {
+            res.status(500).json({ error: 'Server error' });
+        }
     }
 };
