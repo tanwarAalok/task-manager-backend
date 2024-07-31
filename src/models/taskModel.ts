@@ -12,7 +12,7 @@ export interface Task extends Document {
 
 const taskSchema: Schema = new Schema({
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     status: {
         type: String,
         enum: Object.values(TaskStatus),

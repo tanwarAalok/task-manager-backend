@@ -90,12 +90,15 @@ export const createTask = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { title, description, status, priority, deadline } = req.body;
+    const unsetFields: any = {};
 
     try {
+        if(req.body.priority === undefined) unsetFields.priority = "";
+        if(req.body.description === undefined) unsetFields.description = "";
+
         const updatedTask = await TaskModel.findOneAndUpdate(
             { _id: id },
-            { title, description, status, priority, deadline },
+            { $set: req.body, $unset: unsetFields },
             { new: true }
         );
 
