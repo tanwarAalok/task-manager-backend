@@ -59,20 +59,24 @@ export const createTask = async (req: Request, res: Response) => {
         return res.status(400).json({ error: 'UserId not found' });
     }
 
+    if (!title || !status || !deadline) {
+        return res.status(400).json({ error: 'Required fields missing' });
+    }
+
     if (!Object.values(TaskStatus).includes(status)) {
         return res.status(400).json({ error: 'Invalid status' });
     }
 
-    if (!Object.values(TaskPriority).includes(priority)) {
+    if (priority && !Object.values(TaskPriority).includes(priority)) {
         return res.status(400).json({ error: 'Invalid priority' });
     }
 
     try {
         const newTask = new TaskModel({
             title,
-            description,
+            ...(description && { description }),
+            ...(priority && { priority }),
             status,
-            priority,
             deadline,
             createdAt: new Date(),
             createdBy: userId
